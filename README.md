@@ -1,7 +1,10 @@
-# Simple-WinAPI
+# Simple WinAPI Wrapper
 
 Simple Windows API wrapper class for simulating mouse movement, clicking, window manipulation and more...
-Fork from: WinAPI-Wrapper https://github.com/LazoCoder/WinAPI-Wrapper
+
+Fork from:
+
+WinAPI-Wrapper https://github.com/LazoCoder/WinAPI-Wrapper
 
 Nuget available:
 ```
