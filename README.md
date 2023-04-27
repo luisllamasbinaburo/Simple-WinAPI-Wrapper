@@ -1,6 +1,15 @@
-# WinAPI-Wrapper
+# Simple WinAPI Wrapper
 
-Windows API wrapper class for simulating mouse movement, clicking, window manipulation and more...
+Simple Windows API wrapper class for simulating mouse movement, clicking, window manipulation and more...
+
+Fork from:
+
+WinAPI-Wrapper https://github.com/LazoCoder/WinAPI-Wrapper
+
+Nuget available:
+```
+Install-Package simple-winapi-wrapper
+```
 
 # API
 
@@ -73,7 +82,3 @@ public static void ShowTaskBar();
 public static int GetWidth();
 public static int GetHeight();
 ```
-
-# Usage
-
-Compiling the code in the WindowsAPI folder produces a .dll file. Any C# code that references this .dll can utilize the wrapper.
