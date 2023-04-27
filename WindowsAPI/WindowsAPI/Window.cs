@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
 using System.Windows.Forms;
+using static WindowsAPI.WinAPI;
 
 namespace WindowsAPI
 {
-
     /// <summary>
     /// Windows API wrapper class for window related functions.
     /// </summary>
@@ -24,18 +25,12 @@ namespace WindowsAPI
             return hWnd != IntPtr.Zero;
         }
 
-        /// <summary>
-        /// Find and return a handle on the first window with the specified title.
-        /// </summary>
-        /// <param name="windowTitle">The title of the window.</param>
-        /// <returns>The handle to the window.</returns>
-        public static IntPtr Get(string windowTitle)
+        public static bool IsEnabled(IntPtr win)
         {
-            IntPtr hWnd = WinAPI.FindWindow(null, windowTitle);
-            if (hWnd == IntPtr.Zero)
-                throw new Exception("Window not found.");
-            return hWnd;
+            return !GetStyles(win).Contains(WinAPI.WindowStyles.WS_DISABLED);
         }
+
+ 
 
         /// <summary>
         /// Get the handle of the window that is currently in focus.
@@ -132,6 +127,29 @@ namespace WindowsAPI
             Size size = new Size(rec.Width, rec.Height);
             return size;
         }
+        public static Rectangle GetClientSize(IntPtr win)
+        {
+            Rectangle rect = new Rectangle();
+
+            WinAPI.GetClientRect(win, out rect);
+
+            Rectangle result = new Rectangle();
+            Point p = new Point(0, 0);
+            ClientToScreen(win, ref p);
+
+            result.Location = p;
+            result.Width = rect.Right - rect.Left;
+            result.Height = rect.Bottom - rect.Top;
+
+            return result;
+        }
+
+        public static IntPtr GetClassLongPtr(IntPtr hWnd, int nIndex)
+        {
+            if (IntPtr.Size > 4) return WinAPI.GetClassLongPtr64(hWnd, nIndex);
+            else return new IntPtr(WinAPI.GetClassLongPtr32(hWnd, nIndex));
+        }
+
 
         /// <summary>
         /// Get the location of the specified window by the top left corner.
@@ -171,6 +189,47 @@ namespace WindowsAPI
             WinAPI.SetWindowText(hWnd, title);
         }
 
+        public static string GetCaption(IntPtr hWnd)
+        {
+            StringBuilder buff = new StringBuilder(256);          
+            WinAPI.SendMessage(hWnd, WinAPI.WM_GETTEXT, 256, buff);
+            return buff.ToString();
+        }
+
+
+        public static string GetClass(IntPtr win)
+        {
+            if (win == IntPtr.Zero) return "";
+
+            StringBuilder title = new StringBuilder(512);
+            WinAPI.RealGetWindowClass(win, title, 512);
+
+            return title.ToString().Trim();
+        }
+
+        public static int GetProcessId(IntPtr win)
+        {
+            int id = 0;
+
+            WinAPI.GetWindowThreadProcessId(win, ref id);
+
+            return id;
+        }
+
+        public static List<WinAPI.WindowStyles> GetStyles(IntPtr win)
+        {
+            int style = GetWindowLong(win, GWL_STYLE);
+
+            List<WinAPI.WindowStyles> result = new List<WinAPI.WindowStyles>();
+
+            foreach (var ws in Enum.GetValues(typeof(WinAPI.WindowStyles)))
+            {
+                if ((style & (uint)ws) != 0) result.Add((WinAPI.WindowStyles)ws);
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Maximize the specified window.
         /// </summary>
@@ -193,10 +252,17 @@ namespace WindowsAPI
         /// Restore the specified window to its original position if it is maximized or minimized.
         /// </summary>
         /// <param name="hWnd">The handle to the window.</param>
-        public static void Normalize(IntPtr hWnd)
+        public static void Restore(IntPtr hWnd)
         {
             WinAPI.ShowWindow(hWnd, 1);
         }
+
+        public static void Activate(IntPtr win)
+        {
+            if (win != IntPtr.Zero)
+                WinAPI.SendMessage(win, WinAPI.WM_ACTIVATE, WinAPI.WA_CLICKACTIVE, 0);
+        }
+
 
         /// <summary>
         /// Get a screenshot of the specified window.
@@ -205,7 +271,7 @@ namespace WindowsAPI
         /// <returns></returns>
         public static Bitmap Screenshot(IntPtr hWnd)
         {
-            Normalize(hWnd);
+            Restore(hWnd);
             Structs.Rect rc;
             WinAPI.GetWindowRect(hWnd, out rc);
 
@@ -350,6 +416,13 @@ namespace WindowsAPI
             int y = Cursor.Position.Y;
             Point point = new Point(x - hWndRect.X, y - hWndRect.Y);
             return point;
+        }
+
+
+        public static void ExpandTreeViewItem(IntPtr tree, IntPtr item)
+        {
+            WinAPI.SendMessage(tree, WinAPI.TVM_EXPAND, WinAPI.TVE_COLLAPSE | WinAPI.TVE_COLLAPSERESET, (int)item);
+            WinAPI.SendMessage(tree, WinAPI.TVM_EXPAND, WinAPI.TVE_EXPAND, (int)item);
         }
     }
 }

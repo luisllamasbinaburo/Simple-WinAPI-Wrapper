@@ -4,12 +4,21 @@ using System.Windows.Forms;
 
 namespace WindowsAPI
 {
-    
+
     /// <summary>
     /// Wrapper for the Desktop related methods in the Windows API.
     /// </summary>
     public static class Desktop
     {
+        /// <summary>
+        /// Get Desktop handler.
+        /// </summary>
+        /// <returns>Desktop pointer</returns>
+        public static IntPtr GetDesktopWindow()
+        {
+            return WinAPI.GetDesktopWindow();
+        }
+
         /// <summary>
         /// Get a screenshot of the Desktop.
         /// </summary>
