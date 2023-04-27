@@ -11,6 +11,27 @@ Nuget available:
 Install-Package simple-winapi-wrapper
 ```
 
+# Example
+```csharp
+System.Diagnostics.Process.Start("notepad");
+System.Threading.Thread.Sleep(2000);
+
+var windows = WindowSearch.GetAllWindowsByProcess("notepad", false);
+
+foreach (var window in windows)
+{
+    Console.WriteLine($"{window.GetTitle()} - {window.GetClass()}");
+}
+
+var mainWindow = windows.FirstOrDefault(x => x.GetClass().ToLower() == "notepad");
+
+mainWindow.Maximize();
+mainWindow.SetFocused();
+
+Keyboard.Type("hello, hello, hello how are you", 5);
+Console.ReadLine();
+```
+
 # API
 
 The following is a summary of some of the methods that are available. There are more methods and classes than what is listed below but the purpose is to give a rough idea of what the wrapper can do. To see more details on what a particular methods does and what the parameters are, please take a look at the code itself as it is well commented.
