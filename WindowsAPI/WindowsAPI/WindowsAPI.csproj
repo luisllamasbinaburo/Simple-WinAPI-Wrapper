@@ -47,6 +47,9 @@
   <ItemGroup>
     <Compile Include="Conversion.cs" />
     <Compile Include="Draw.cs" />
+    <Compile Include="IntPtrExtensions.cs" />
+    <Compile Include="Keyboard.cs" />
+    <Compile Include="KeyConstants.cs" />
     <Compile Include="Mouse.cs" />
     <Compile Include="MouseDrag.cs" />
     <Compile Include="Structs.cs" />

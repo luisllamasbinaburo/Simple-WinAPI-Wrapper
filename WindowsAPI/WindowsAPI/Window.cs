@@ -30,17 +30,6 @@ namespace WindowsAPI
             return !GetStyles(win).Contains(WinAPI.WindowStyles.WS_DISABLED);
         }
 
- 
-
-        /// <summary>
-        /// Get the handle of the window that is currently in focus.
-        /// </summary>
-        /// <returns>The handle to the focused Window.</returns>
-        public static IntPtr GetFocused()
-        {
-            return WinAPI.GetForegroundWindow();
-        }
-
         /// <summary>
         /// Put focus on a window.
         /// </summary>
@@ -127,6 +116,7 @@ namespace WindowsAPI
             Size size = new Size(rec.Width, rec.Height);
             return size;
         }
+
         public static Rectangle GetClientSize(IntPtr win)
         {
             Rectangle rect = new Rectangle();

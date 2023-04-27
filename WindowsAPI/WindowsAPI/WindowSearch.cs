@@ -25,6 +25,15 @@ namespace WindowsAPI
             return hWnd;
         }
 
+        /// <summary>
+        /// Get the handle of the window that is currently in focus.
+        /// </summary>
+        /// <returns>The handle to the focused Window.</returns>
+        public static IntPtr GetFocused()
+        {
+            return WinAPI.GetForegroundWindow();
+        }
+
         public static IntPtr GetForegroundWindow()
         {
             return WinAPI.GetForegroundWindow();            
@@ -328,7 +337,7 @@ namespace WindowsAPI
             return buff.ToString();
         }
 
-        public static IntPtr GetWindowsByText(string processName, string windowText, bool exact, bool onlyVisible)
+        public static IntPtr GetWindowsByTitle(string processName, string windowText, bool exact, bool onlyVisible)
         {
             List<IntPtr> wins = GetAllWindowsByProcess(processName, onlyVisible);
 
@@ -398,7 +407,7 @@ namespace WindowsAPI
             return IntPtr.Zero;
         }
 
-        public static List<IntPtr> GetAllWindowsByText(string processName, string windowText, bool exact)
+        public static List<IntPtr> GetAllWindowsByTitle(string processName, string windowText, bool exact)
         {
             List<IntPtr> result = new List<IntPtr>();
 

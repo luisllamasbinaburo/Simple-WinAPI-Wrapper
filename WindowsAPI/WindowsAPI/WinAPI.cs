@@ -125,6 +125,9 @@ namespace WindowsAPI
         [DllImport("user32.dll", EntryPoint = "GetClassLongPtr")]
         internal static extern IntPtr GetClassLongPtr64(IntPtr hWnd, int nIndex);
 
+        [DllImport("user32.dll")]
+        public static extern void keybd_event(int bVk, byte bScan, UInt32 dwFlags, int dwExtraInfo);
+
 
         internal const int GW_HWNDNEXT = 2;
         internal const int GW_CHILD = 5;
@@ -357,5 +360,10 @@ namespace WindowsAPI
             //SETBKIMAGE             = SETBKIMAGEA,
             //GETBKIMAGE             = GETBKIMAGEA,
         }
+
+       internal const UInt32 KEYEVENTF_EXTENDEDKEY = 1;
+       internal const UInt32 KEYEVENTF_KEYUP = 2;
+       internal const int KEY_ALT = 0x12;
+       internal const int KEY_CONTROL = 0x11;
     }
 }
